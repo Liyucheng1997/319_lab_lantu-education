@@ -1,0 +1,6 @@
+<svg width="220" height="140" viewBox="0 14 220 140" xmlns="http://www.w3.org/2000/svg">
+  <!-- 澜图 LANTU 图形符号（无字标，favicon / 水印用） -->
+  <path d="M106,58 C88,44 60,46 44,56 L44,100 C62,92 88,94 106,106 Z" fill="#1B6FC9"/>
+  <path d="M114,58 C132,44 160,46 176,56 L176,100 C158,92 132,94 114,106 Z" fill="#0F4C81"/>
+  <path d="M28,136 C48,124 62,148 82,136 S116,124 136,136 S170,148 190,136" fill="none" stroke="#5EA8E8" stroke-width="6" stroke-linecap="round"/>
+</svg>

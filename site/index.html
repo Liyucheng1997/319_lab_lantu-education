@@ -1,0 +1,384 @@
+<title>澜图 LANTU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700;900&family=Ma+Shan+Zheng&display=swap">
+<style>
+  /* 单主题设计：通体水墨宣纸世界，所有底色显式绘制 */
+  :root{
+    --paper:#F4F2EB; --paper2:#EDEBE2; --page:#FBFAF5;
+    --ink:#1C3049; --ink2:#3D5A78; --muted:#6E8296;
+    --navy:#0F3557; --deep:#0F4C81; --blue:#1B6FC9; --sky:#5EA8E8; --mist:#D9E6F0;
+    --seal:#B03A2E; --gold:#8C6D2F; --line:#DDD9CC;
+    --serif:"Noto Serif SC","Source Han Serif SC",Georgia,"Songti SC",serif;
+    --brush:"Ma Shan Zheng",var(--serif);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:
+      radial-gradient(1200px 500px at 50% -100px, #FFFFFF 0%, transparent 60%),
+      linear-gradient(180deg, var(--paper) 0%, var(--paper2) 100%);
+    color:var(--ink);font-family:var(--serif);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    min-height:100vh;padding:30px 14px 26px;overflow-x:hidden;
+  }
+  a{color:var(--deep);text-decoration:none;border-bottom:1px solid rgba(15,76,129,.35)}
+  a:hover{color:var(--blue)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+  /* ================= 书 ================= */
+  .stage{display:flex;align-items:center;gap:14px;width:100%;justify-content:center}
+  .book{
+    position:relative;width:min(1060px,calc(100vw - 120px));aspect-ratio:16/10.6;
+    perspective:2600px;
+  }
+  .book::before{ /* 书影 */
+    content:"";position:absolute;left:3%;right:3%;bottom:-16px;height:30px;
+    background:radial-gradient(50% 100% at 50% 0,rgba(28,48,73,.28),transparent 70%);
+    filter:blur(6px);
+  }
+  .pg{position:absolute;top:0;height:100%;width:50%;background:var(--page);overflow:hidden}
+  .pg.base-l{left:0;border-radius:10px 2px 2px 10px;
+    box-shadow:inset -14px 0 26px -16px rgba(28,48,73,.35), 0 2px 10px rgba(28,48,73,.12);}
+  .pg.base-r{right:0;border-radius:2px 10px 10px 2px;
+    box-shadow:inset 14px 0 26px -16px rgba(28,48,73,.35), 0 2px 10px rgba(28,48,73,.12);}
+  /* 叠页边缘 */
+  .pg.base-l::after,.pg.base-r::after{content:"";position:absolute;top:6px;bottom:6px;width:8px;pointer-events:none}
+  .pg.base-l::after{left:-6px;background:repeating-linear-gradient(90deg,#E7E4D8 0 2px,#F7F5EE 2px 4px);border-radius:6px 0 0 6px}
+  .pg.base-r::after{right:-6px;background:repeating-linear-gradient(90deg,#F7F5EE 0 2px,#E7E4D8 2px 4px);border-radius:0 6px 6px 0}
+
+  .leaf{
+    position:absolute;top:0;right:0;width:50%;height:100%;
+    transform-style:preserve-3d;transform-origin:left center;
+    transition:transform 1s cubic-bezier(.35,.1,.2,1);
+  }
+  .leaf.flipped{transform:rotateY(-180deg)}
+  .face{
+    position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    background:var(--page);overflow:hidden;
+  }
+  .face.front{border-radius:2px 10px 10px 2px;box-shadow:inset 14px 0 26px -16px rgba(28,48,73,.30)}
+  .face.back{transform:rotateY(180deg);border-radius:10px 2px 2px 10px;box-shadow:inset -14px 0 26px -16px rgba(28,48,73,.30)}
+
+  /* ================= 翻页控件 ================= */
+  .arrow{
+    background:none;border:1px solid var(--line);border-radius:50%;width:46px;height:46px;
+    font-size:20px;color:var(--ink2);cursor:pointer;flex:none;font-family:var(--serif);
+    transition:all .25s;background:rgba(255,255,255,.5);
+  }
+  .arrow:hover:not(:disabled){border-color:var(--blue);color:var(--blue)}
+  .arrow:disabled{opacity:.25;cursor:default}
+  .hot{position:absolute;top:0;height:100%;width:8%;cursor:pointer;z-index:60;background:none;border:none}
+  .hot.r{right:0}.hot.l{left:0}
+  .dots{display:flex;gap:26px;margin-top:26px;justify-content:center}
+  .dots button{
+    background:none;border:none;cursor:pointer;font-family:var(--serif);
+    font-size:13px;letter-spacing:3px;color:var(--muted);padding:2px 0;
+    border-bottom:2px solid transparent;transition:all .25s;
+  }
+  .dots button.on{color:var(--navy);border-bottom-color:var(--sky)}
+  .hint{margin-top:10px;font-size:11.5px;color:var(--muted);letter-spacing:2px}
+
+  /* ================= 通用页内版式 ================= */
+  .inner{position:relative;height:100%;padding:clamp(22px,4.4%,48px) clamp(20px,5%,52px);display:flex;flex-direction:column}
+  .eyebrow{font-size:12px;letter-spacing:6px;color:var(--sky);margin-bottom:8px}
+  h2{font-size:clamp(20px,2.2vw,27px);font-weight:900;letter-spacing:4px;color:var(--navy);text-wrap:balance}
+  .pnum{position:absolute;bottom:12px;font-size:10.5px;letter-spacing:2px;color:var(--muted)}
+  .pnum.l{left:20px}.pnum.r{right:20px}
+
+  /* ================= 第一页 · 山水 hero ================= */
+  .sea{position:absolute;inset:0;pointer-events:none}
+  .sea svg{position:absolute;inset:0;width:100%;height:100%}
+  .heroL .inner{justify-content:space-between;z-index:2}
+  .brandrow{display:flex;align-items:center;gap:12px}
+  .brandrow svg{flex:none}
+  .brandrow .bn{font-weight:900;font-size:17px;letter-spacing:5px;color:var(--navy)}
+  .brandrow .be{font-size:10px;letter-spacing:4px;color:var(--muted);font-family:Georgia,serif}
+  .heromid{display:flex;justify-content:flex-end;align-items:center;gap:22px;flex:1;padding:8px 4px 0 0}
+  .vslogan{writing-mode:vertical-rl;font-family:var(--brush);color:var(--ink);
+    font-size:clamp(30px,3.6vw,46px);letter-spacing:14px;line-height:1.35}
+  .vslogan span{display:block}
+  .sealcol{display:flex;flex-direction:column;align-items:center;gap:10px;writing-mode:vertical-rl}
+  .seal{
+    writing-mode:vertical-rl;font-family:var(--brush);background:var(--seal);color:#FBF6EC;
+    font-size:15px;letter-spacing:3px;padding:8px 5px;border-radius:3px;transform:rotate(-2deg);
+    box-shadow:0 1px 4px rgba(176,58,46,.35);
+  }
+  .herofoot{font-size:12.5px;color:var(--muted);letter-spacing:1px;line-height:2}
+  .herofoot .who{font-size:13.5px;color:var(--ink2)}
+
+  /* ================= 服务卡 ================= */
+  .svc{border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:rgba(255,255,255,.55);margin-top:14px}
+  .svc .hd{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .svc .nm{font-family:var(--brush);font-size:clamp(19px,1.9vw,24px);color:var(--navy);letter-spacing:3px}
+  .svc .pr{font-family:Georgia,var(--serif);font-size:clamp(17px,1.8vw,22px);color:var(--blue);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .svc .pr small{font-size:11px;color:var(--muted)}
+  .svc p{font-size:clamp(12px,1.15vw,13.5px);color:var(--ink2);line-height:1.9;margin-top:6px}
+  .svc.hero-svc{border-color:var(--blue);background:linear-gradient(180deg,rgba(220,235,247,.7),rgba(255,255,255,.6));position:relative}
+  .svc.hero-svc .tag{position:absolute;top:-9px;right:14px;font-size:10.5px;background:var(--seal);color:#FBF6EC;border-radius:99px;padding:1px 10px;letter-spacing:3px}
+  .svc .fine{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.8;border-top:1px dashed var(--line);padding-top:8px}
+  .lead-s{font-size:clamp(12.5px,1.2vw,14px);color:var(--ink2);line-height:2;margin-top:10px;max-width:40ch}
+  .pagewave{position:absolute;left:0;right:0;bottom:0;height:60px;width:100%;opacity:.28;pointer-events:none}
+
+  /* ================= 流程 ================= */
+  .steps{list-style:none;margin-top:14px;border-left:2px solid var(--mist);}
+  .steps li{position:relative;padding:0 0 clamp(8px,1.4vw,16px) 20px}
+  .steps li:last-child{padding-bottom:0}
+  .steps li::before{content:"";position:absolute;left:-6px;top:.42em;width:10px;height:10px;border-radius:50%;background:var(--page);border:2.5px solid var(--blue)}
+  .steps .t{font-size:clamp(13px,1.3vw,15px);font-weight:700;color:var(--navy)}
+  .steps .t em{font-style:normal;color:var(--gold);font-size:.85em;margin-left:6px}
+  .steps .d{font-size:clamp(11px,1.05vw,12.5px);color:var(--muted);line-height:1.75}
+
+  /* ================= 尾页 ================= */
+  .endcta{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px}
+  .endcta .big{font-family:var(--brush);font-size:clamp(26px,2.8vw,36px);color:var(--navy);letter-spacing:6px;line-height:1.6}
+  .endcta p{font-size:clamp(12.5px,1.2vw,14px);color:var(--ink2);line-height:2;max-width:36ch}
+  .contact{font-size:clamp(12px,1.15vw,13.5px);color:var(--ink2);line-height:2.2}
+  .contact b{color:var(--navy);font-weight:700;letter-spacing:1px}
+  .sitefoot{border-top:1px solid var(--line);margin-top:14px;padding-top:12px;display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center;font-size:10.5px;color:var(--muted);letter-spacing:1.5px}
+  .sitefoot .fmark{display:flex;align-items:center;gap:6px;color:var(--ink2)}
+
+  /* ================= 动画 ================= */
+  @media (prefers-reduced-motion: no-preference){
+    .waveband{animation:drift linear infinite}
+    .w1{animation-duration:11s}.w2{animation-duration:17s;animation-direction:reverse}.w3{animation-duration:23s}
+    @keyframes drift{from{transform:translateX(0)}to{transform:translateX(-300px)}}
+    .boatwrap{animation:bob 6.5s ease-in-out infinite}
+    @keyframes bob{0%,100%{transform:translate(0,0) rotate(-1.2deg)}50%{transform:translate(6px,7px) rotate(1.6deg)}}
+    .mistdrift{animation:mistmove 26s ease-in-out infinite alternate}
+    @keyframes mistmove{from{transform:translateX(-14px)}to{transform:translateX(18px)}}
+  }
+
+  /* ================= 移动端：书摊开成长卷 ================= */
+  @media (max-width: 880px){
+    body{padding:18px 14px 40px}
+    .stage{display:block}
+    .arrow,.hot,.dots,.hint{display:none}
+    .book{width:100%;aspect-ratio:auto;perspective:none}
+    .book::before{display:none}
+    .pg,.leaf,.face{position:static;width:100%;height:auto;transform:none !important;border-radius:10px;box-shadow:0 2px 12px rgba(28,48,73,.12);margin-bottom:16px}
+    .leaf{background:none;box-shadow:none;margin:0}
+    .face{margin-bottom:16px}
+    .inner{height:auto;min-height:0;padding:30px 24px}
+    .heroL .inner,.heroR-holder{min-height:380px}
+    .sea svg{height:100%}
+    .pnum{display:none}
+  }
+</style>
+
+<div class="stage">
+  <button class="arrow" id="prev" aria-label="上一页">‹</button>
+
+  <div class="book" id="book">
+
+    <!-- ========== 底层左：P1 左 · 题名页 ========== -->
+    <div class="pg base-l heroL">
+      <div class="sea">
+        <svg viewBox="0 0 600 640" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+          <rect width="600" height="640" fill="#FBFAF5"/>
+          <path d="M-40,240 C60,190 150,225 240,205 C330,186 420,225 520,200 C570,190 610,205 660,196 L660,640 L-40,640 Z" fill="#C9DAE8" opacity=".35"/>
+          <g class="mistdrift">
+            <ellipse cx="180" cy="268" rx="230" ry="42" fill="#FBFAF5" opacity=".85"/>
+            <ellipse cx="430" cy="300" rx="260" ry="48" fill="#FBFAF5" opacity=".75"/>
+          </g>
+          <g opacity=".5">
+            <g class="waveband w2">
+              <path d="M-300,560 q75,-22 150,0 t150,0 t150,0 t150,0 t150,0 t150,0 t150,0 L900,640 L-300,640 Z" fill="#A8C8E2" opacity=".5"/>
+            </g>
+            <g class="waveband w3">
+              <path d="M-300,596 q75,-18 150,0 t150,0 t150,0 t150,0 t150,0 t150,0 t150,0 L900,640 L-300,640 Z" fill="#7FB0D8" opacity=".45"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="inner">
+        <div class="brandrow">
+          <svg width="46" height="34" viewBox="18 40 184 112" aria-label="澜图 Logo">
+            <path d="M106,58 C88,44 60,46 44,56 L44,100 C62,92 88,94 106,106 Z" fill="#1B6FC9"/>
+            <path d="M114,58 C132,44 160,46 176,56 L176,100 C158,92 132,94 114,106 Z" fill="#0F4C81"/>
+            <path d="M28,136 C48,124 62,148 82,136 S116,124 136,136 S170,148 190,136" fill="none" stroke="#5EA8E8" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <div class="bn">澜图</div>
+            <div class="be">L A N T U</div>
+          </div>
+        </div>
+        <div class="heromid">
+          <div class="sealcol">
+            <div class="seal">澜图</div>
+          </div>
+          <div class="vslogan"><span>书页起澜</span><span>如期抵岸</span></div>
+        </div>
+        <div class="herofoot">
+          <div class="who">意大利中国留学生 · 学业规划与毕业辅导</div>
+          主理人主页 · <a href="https://liyucheng.me" target="_blank" rel="noopener">liyucheng.me</a>
+        </div>
+      </div>
+      <span class="pnum l">壹 · 起澜</span>
+    </div>
+
+    <!-- ========== 叶 A：正面 P1 右 · 海上小舟 / 背面 P2 左 ========== -->
+    <div class="leaf" id="leafA">
+      <div class="face front heroR-holder">
+        <div class="sea">
+          <svg viewBox="0 0 600 640" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <rect width="600" height="640" fill="#FBFAF5"/>
+            <!-- 淡月 -->
+            <circle cx="452" cy="118" r="40" fill="#E4EDF4"/>
+            <circle cx="452" cy="118" r="40" fill="none" stroke="#C9DAE8" stroke-width="1.5" opacity=".8"/>
+            <!-- 远山 两重 -->
+            <path d="M-30,232 C60,168 140,214 230,188 C310,166 380,206 470,184 C530,170 590,192 650,180 L650,640 L-30,640 Z" fill="#B7CDE0" opacity=".5"/>
+            <path d="M-30,282 C90,240 190,274 300,252 C410,230 500,268 650,246 L650,640 L-30,640 Z" fill="#CFDFEC" opacity=".55"/>
+            <g class="mistdrift">
+              <ellipse cx="200" cy="300" rx="260" ry="46" fill="#FBFAF5" opacity=".9"/>
+              <ellipse cx="470" cy="330" rx="240" ry="42" fill="#FBFAF5" opacity=".8"/>
+            </g>
+            <!-- 海：三重波 -->
+            <g class="waveband w1">
+              <path d="M-300,462 q75,-26 150,0 t150,0 t150,0 t150,0 t150,0 t150,0 t150,0 L900,640 L-300,640 Z" fill="#BFD8EA" opacity=".7"/>
+            </g>
+            <!-- 小舟 -->
+            <g class="boatwrap">
+              <g transform="translate(300,470)">
+                <path d="M-52,0 C-30,11 30,11 52,0 L38,15 C20,23 -20,23 -38,15 Z" fill="#1C3049"/>
+                <path d="M6,-30 L22,-30 L14,-38 Z" fill="#1C3049"/>
+                <circle cx="14" cy="-25" r="4.6" fill="#1C3049"/>
+                <path d="M14,-20 C11,-13 10,-7 8,-1" stroke="#1C3049" stroke-width="4.6" fill="none" stroke-linecap="round"/>
+                <line x1="24" y1="-40" x2="34" y2="16" stroke="#1C3049" stroke-width="2.6" stroke-linecap="round"/>
+              </g>
+            </g>
+            <g class="waveband w2">
+              <path d="M-300,520 q75,-24 150,0 t150,0 t150,0 t150,0 t150,0 t150,0 t150,0 L900,640 L-300,640 Z" fill="#8FBBDE" opacity=".75"/>
+            </g>
+            <g class="waveband w3">
+              <path d="M-300,578 q75,-20 150,0 t150,0 t150,0 t150,0 t150,0 t150,0 t150,0 L900,640 L-300,640 Z" fill="#5E93BF" opacity=".8"/>
+            </g>
+            <!-- 点鸥 -->
+            <g stroke="#3D5A78" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".7">
+              <path d="M150,150 q7,-7 14,0 q7,-7 14,0"/>
+              <path d="M196,172 q6,-6 12,0 q6,-6 12,0"/>
+            </g>
+          </svg>
+        </div>
+        <span class="pnum r">贰 · 渡海</span>
+      </div>
+      <div class="face back">
+        <div class="inner">
+          <div class="eyebrow">服 务</div>
+          <h2>澜图三课</h2>
+          <p class="lead-s">不卖课时，只对结果负责。从一张航线图开始，把剩余的学分一科一科送到岸上。</p>
+          <div class="svc">
+            <div class="hd"><span class="nm">澜图规划</span><span class="pr">99€<small> / 次</small></span></div>
+            <p>90 分钟学业诊断：盘点剩余学分、排布考期顺序、生成逐月复习日历——先看清航线，再决定要不要同行。</p>
+          </div>
+          <svg class="pagewave" viewBox="0 0 600 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,50 q50,-18 100,0 t100,0 t100,0 t100,0 t100,0 t100,0 L600,80 L0,80 Z" fill="#BFD8EA"/><path d="M0,64 q50,-14 100,0 t100,0 t100,0 t100,0 t100,0 t100,0 L600,80 L0,80 Z" fill="#8FBBDE" opacity=".7"/></svg>
+          <span class="pnum l">叁 · 三课</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 叶 B：正面 P2 右 / 背面 P3 左 ========== -->
+    <div class="leaf" id="leafB">
+      <div class="face front">
+        <div class="inner">
+          <div class="svc hero-svc" style="margin-top:34px">
+            <span class="tag">包 过</span>
+            <div class="hd"><span class="nm">单科包过</span><span class="pr">800€<small> / 科</small></span></div>
+            <p>划重点讲义 · 思维导图 · 真题梳理 · 口试全真模拟 · 每周督学。</p>
+            <p><strong style="color:var(--deep)">定金 400€ 开工，过科后再付尾款 400€。</strong></p>
+            <div class="fine">当期未过：免费辅导至下一考期，通过才收尾款。只做合规辅导，不代考、不代写。</div>
+          </div>
+          <div class="svc">
+            <div class="hd"><span class="nm">毕业陪跑</span><span class="pr">按方案<small> 打包价</small></span></div>
+            <p>多科打包 + 全程规划督学 + 论文期协调，整体价格低于单科累加，陪你走完最后一程。</p>
+          </div>
+          <svg class="pagewave" viewBox="0 0 600 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,50 q50,-18 100,0 t100,0 t100,0 t100,0 t100,0 t100,0 L600,80 L0,80 Z" fill="#BFD8EA"/><path d="M0,64 q50,-14 100,0 t100,0 t100,0 t100,0 t100,0 t100,0 L600,80 L0,80 Z" fill="#8FBBDE" opacity=".7"/></svg>
+          <span class="pnum r">肆 · 承诺</span>
+        </div>
+      </div>
+      <div class="face back">
+        <div class="inner">
+          <div class="eyebrow">流 程</div>
+          <h2>六步抵岸</h2>
+          <ol class="steps" style="margin-top:16px">
+            <li><div class="t">免费初谈 · 30 分钟</div><div class="d">聊聊专业、剩余学分与挂科史——澜图只接愿意执行的学生。</div></li>
+            <li><div class="t">学业诊断</div><div class="d">拆解剩余科目，产出你的专属"毕业航线图"。</div></li>
+            <li><div class="t">签约起航 <em>定金 400€</em></div><div class="d">科目、考期、包过规则写进协议，白纸黑字。</div></li>
+            <li><div class="t">辅导执行 · 4–8 周</div><div class="d">每周辅导 + 讲义思维导图交付 + 打卡督学。</div></li>
+            <li><div class="t">考前冲刺</div><div class="d">真题演练、意语口试全真模拟。</div></li>
+            <li><div class="t">出分结算 <em>尾款 400€</em></div><div class="d">过科付尾款；未过免费进入下一考期，直到抵岸。</div></li>
+          </ol>
+          <span class="pnum l">伍 · 同行</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 底层右：P3 右 · 启程与底栏 ========== -->
+    <div class="pg base-r">
+      <div class="inner">
+        <div class="endcta">
+          <div class="big">与其焦虑<br>不如启程</div>
+          <p>先聊 30 分钟，把你剩下的科目摊开看看。也许离岸，比你想的近。</p>
+          <div class="contact">
+            <b>微　信</b> · LANTU-2026（备注"澜图"）<br>
+            <b>小红书</b> · @澜图LANTU<br>
+            <b>主理人</b> · <a href="https://liyucheng.me" target="_blank" rel="noopener">liyucheng.me</a>
+          </div>
+        </div>
+        <div class="sitefoot">
+          <span class="fmark">
+            <svg width="26" height="18" viewBox="18 40 184 112" aria-hidden="true">
+              <path d="M106,58 C88,44 60,46 44,56 L44,100 C62,92 88,94 106,106 Z" fill="#1B6FC9"/>
+              <path d="M114,58 C132,44 160,46 176,56 L176,100 C158,92 132,94 114,106 Z" fill="#0F4C81"/>
+              <path d="M28,136 C48,124 62,148 82,136 S116,124 136,136 S170,148 190,136" fill="none" stroke="#5EA8E8" stroke-width="6" stroke-linecap="round"/>
+            </svg>
+            澜图 LANTU
+          </span>
+          <span>书页起澜 · 如期抵岸</span>
+          <span>© 2026 LANTU</span>
+          <span><a href="https://liyucheng.me" target="_blank" rel="noopener">liyucheng.me</a></span>
+        </div>
+      </div>
+      <span class="pnum r">陆 · 启程</span>
+    </div>
+
+    <button class="hot l" id="hotL" aria-label="向前翻页"></button>
+    <button class="hot r" id="hotR" aria-label="向后翻页"></button>
+  </div>
+
+  <button class="arrow" id="next" aria-label="下一页">›</button>
+</div>
+
+<div class="dots" id="dots" role="tablist">
+  <button class="on" data-i="0">起 澜</button>
+  <button data-i="1">三 课</button>
+  <button data-i="2">同 行</button>
+</div>
+<div class="hint">点击书页边缘或箭头翻页</div>
+
+<script>
+  const leaves=[document.getElementById('leafA'),document.getElementById('leafB')];
+  const prev=document.getElementById('prev'),next=document.getElementById('next');
+  const dots=[...document.querySelectorAll('#dots button')];
+  let cur=0;
+  function go(n){
+    n=Math.max(0,Math.min(leaves.length,n));
+    leaves.forEach((l,i)=>{
+      l.classList.toggle('flipped', i<n);
+      l.style.zIndex = (i<n) ? 10+i : 20+(leaves.length-i);
+    });
+    cur=n;
+    prev.disabled = cur===0;
+    next.disabled = cur===leaves.length;
+    dots.forEach((d,i)=>d.classList.toggle('on', i===cur));
+  }
+  prev.addEventListener('click',()=>go(cur-1));
+  next.addEventListener('click',()=>go(cur+1));
+  document.getElementById('hotL').addEventListener('click',()=>go(cur-1));
+  document.getElementById('hotR').addEventListener('click',()=>go(cur+1));
+  dots.forEach(d=>d.addEventListener('click',()=>go(+d.dataset.i)));
+  window.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight')go(cur+1);
+    if(e.key==='ArrowLeft')go(cur-1);
+  });
+  go(0);
+</script>

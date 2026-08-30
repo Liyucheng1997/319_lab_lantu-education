@@ -1,0 +1,126 @@
+<meta charset="utf-8">
+<title>澜图 LANTU — 方案四抽象迭代</title>
+<style>
+  :root{
+    --navy:#0A2E52; --deep:#0F4C81; --blue:#1B6FC9; --sky:#5EA8E8; --mist:#DCEBF7;
+    --bg:#F5F8FC; --ink:#12253A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Source Han Serif SC","Noto Serif SC",Georgia,"Songti SC",serif;background:var(--bg);color:var(--ink);padding:40px 32px 60px}
+  h1{font-size:26px;letter-spacing:2px;margin-bottom:6px}
+  .sub{color:#56718c;margin-bottom:32px;font-size:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:26px;max-width:1300px}
+  .card{background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(10,46,82,.08);overflow:hidden}
+  .card h2{font-size:16px;padding:16px 22px 4px;letter-spacing:1px}
+  .card p{font-size:13px;color:#56718c;padding:0 22px 12px;line-height:1.7}
+  .stage{display:grid;grid-template-columns:1fr 1fr}
+  .chip{display:flex;align-items:center;justify-content:center;padding:22px 10px;min-height:200px}
+  .chip.light{background:linear-gradient(180deg,#fff,#EDF4FB)}
+  .chip.dark{background:linear-gradient(180deg,#0A2E52,#071E38)}
+  .tag{font-size:12px;background:var(--mist);color:var(--deep);border-radius:99px;padding:2px 10px;margin-left:8px;vertical-align:middle;font-family:sans-serif}
+</style>
+
+<h1>方案四 · 波间书卷 —— 抽象迭代</h1>
+<div class="sub">书的元素逐级做减法：4A 去掉书壳 → 4B 只剩一条"书脊线" → 4C 书与浪合为一个图形</div>
+
+<div class="grid">
+
+<!-- ============ 4A 双页成澜 ============ -->
+<div class="card">
+  <h2>4A · 双页成澜 <span class="tag">面 · 中度抽象</span></h2>
+  <p>去掉书壳轮廓和内页线，只留两片扬起的"页"，如帆亦如浪，下方一道波线托底。元素从七个减到三个。</p>
+  <div class="stage">
+    <div class="chip light">
+      <svg width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+        <path d="M106,58 C88,44 60,46 44,56 L44,100 C62,92 88,94 106,106 Z" fill="#1B6FC9"/>
+        <path d="M114,58 C132,44 160,46 176,56 L176,100 C158,92 132,94 114,106 Z" fill="#0F4C81"/>
+        <path d="M28,136 C48,124 62,148 82,136 S116,124 136,136 S170,148 190,136" fill="none" stroke="#5EA8E8" stroke-width="6" stroke-linecap="round"/>
+        <text x="110" y="190" text-anchor="middle" font-family="'Source Han Serif SC','Songti SC',serif" font-size="27" font-weight="700" fill="#0A2E52" letter-spacing="7">澜 图</text>
+        <text x="112" y="212" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#1B6FC9" letter-spacing="6">L A N T U</text>
+      </svg>
+    </div>
+    <div class="chip dark">
+      <svg width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+        <path d="M106,58 C88,44 60,46 44,56 L44,100 C62,92 88,94 106,106 Z" fill="#5EA8E8"/>
+        <path d="M114,58 C132,44 160,46 176,56 L176,100 C158,92 132,94 114,106 Z" fill="#EAF4FF"/>
+        <path d="M28,136 C48,124 62,148 82,136 S116,124 136,136 S170,148 190,136" fill="none" stroke="#1B6FC9" stroke-width="6" stroke-linecap="round"/>
+        <text x="110" y="190" text-anchor="middle" font-family="'Source Han Serif SC','Songti SC',serif" font-size="27" font-weight="700" fill="#fff" letter-spacing="7">澜 图</text>
+        <text x="112" y="212" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5EA8E8" letter-spacing="6">L A N T U</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 4B 一线书澜 ============ -->
+<div class="card">
+  <h2>4B · 一线书澜 <span class="tag">线 · 高度抽象</span></h2>
+  <p>整本书只剩一条线：两道弧在中央落成书脊，既是摊开的书页，也是一朵浪的双峰；下方两道波线呼应同一曲率。三条线讲完全部。</p>
+  <div class="stage">
+    <div class="chip light">
+      <svg width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke-linecap="round">
+          <path d="M36,74 C62,52 94,60 110,88 C126,60 158,52 184,74" stroke="#0A2E52" stroke-width="7"/>
+          <path d="M28,122 C48,110 62,134 82,122 S116,110 136,122 S170,134 190,122" stroke="#1B6FC9" stroke-width="5.5"/>
+          <path d="M44,148 C64,136 78,160 98,148 S132,136 152,148 S178,154 184,150" stroke="#5EA8E8" stroke-width="5.5" opacity=".65"/>
+        </g>
+        <text x="110" y="192" text-anchor="middle" font-family="'Source Han Serif SC','Songti SC',serif" font-size="27" font-weight="700" fill="#0A2E52" letter-spacing="7">澜 图</text>
+        <text x="112" y="214" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#1B6FC9" letter-spacing="6">L A N T U</text>
+      </svg>
+    </div>
+    <div class="chip dark">
+      <svg width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke-linecap="round">
+          <path d="M36,74 C62,52 94,60 110,88 C126,60 158,52 184,74" stroke="#EAF4FF" stroke-width="7"/>
+          <path d="M28,122 C48,110 62,134 82,122 S116,110 136,122 S170,134 190,122" stroke="#5EA8E8" stroke-width="5.5"/>
+          <path d="M44,148 C64,136 78,160 98,148 S132,136 152,148 S178,154 184,150" stroke="#1B6FC9" stroke-width="5.5" opacity=".85"/>
+        </g>
+        <text x="110" y="192" text-anchor="middle" font-family="'Source Han Serif SC','Songti SC',serif" font-size="27" font-weight="700" fill="#fff" letter-spacing="7">澜 图</text>
+        <text x="112" y="214" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5EA8E8" letter-spacing="6">L A N T U</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 4C 澜页合一 ============ -->
+<div class="card">
+  <h2>4C · 澜页合一 <span class="tag">合体 · 极致抽象</span></h2>
+  <p>不再"书浮在浪上"，而是书页的下缘本身就是波浪——书与澜合为一个图形，书脊下坠一滴水珠。单图形，最像一个成熟品牌的符号。</p>
+  <div class="stage">
+    <div class="chip light">
+      <svg width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="ga1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1B6FC9"/><stop offset="1" stop-color="#0F4C81"/>
+          </linearGradient>
+          <linearGradient id="ga2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#5EA8E8"/><stop offset="1" stop-color="#1B6FC9"/>
+          </linearGradient>
+        </defs>
+        <path d="M106,62 C88,48 58,50 40,60 L40,104 C48,98 56,108 66,104 C78,99 86,109 96,105 C100,103 103,105 106,110 Z" fill="url(#ga1)"/>
+        <path d="M114,62 C132,48 162,50 180,60 L180,104 C172,98 164,108 154,104 C142,99 134,109 124,105 C120,103 117,105 114,110 Z" fill="url(#ga2)"/>
+        <circle cx="110" cy="126" r="5" fill="#5EA8E8"/>
+        <text x="110" y="190" text-anchor="middle" font-family="'Source Han Serif SC','Songti SC',serif" font-size="27" font-weight="700" fill="#0A2E52" letter-spacing="7">澜 图</text>
+        <text x="112" y="212" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#1B6FC9" letter-spacing="6">L A N T U</text>
+      </svg>
+    </div>
+    <div class="chip dark">
+      <svg width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gb1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#8CC3F2"/><stop offset="1" stop-color="#5EA8E8"/>
+          </linearGradient>
+          <linearGradient id="gb2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#EAF4FF"/><stop offset="1" stop-color="#8CC3F2"/>
+          </linearGradient>
+        </defs>
+        <path d="M106,62 C88,48 58,50 40,60 L40,104 C48,98 56,108 66,104 C78,99 86,109 96,105 C100,103 103,105 106,110 Z" fill="url(#gb1)"/>
+        <path d="M114,62 C132,48 162,50 180,60 L180,104 C172,98 164,108 154,104 C142,99 134,109 124,105 C120,103 117,105 114,110 Z" fill="url(#gb2)"/>
+        <circle cx="110" cy="126" r="5" fill="#8CC3F2"/>
+        <text x="110" y="190" text-anchor="middle" font-family="'Source Han Serif SC','Songti SC',serif" font-size="27" font-weight="700" fill="#fff" letter-spacing="7">澜 图</text>
+        <text x="112" y="212" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5EA8E8" letter-spacing="6">L A N T U</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+</div>
